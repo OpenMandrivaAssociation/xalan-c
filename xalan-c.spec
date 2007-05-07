@@ -1,6 +1,5 @@
 %define tarversion  1_10_0
 %define packname xml-xalan
-%define major 19
 %define minor 0
 %define libname %mklibname %{name} %{minor}
 
@@ -15,7 +14,6 @@ Source: Xalan-C_1_10_0-src.tar.gz
 Patch0: xml-xalan-lib64.patch
 BuildRoot: %_tmppath/%name-%version-%release-root
 BuildRequires: xerces-c-devel >= 2.7.0
-BuildRequires: xalan-c-devel
 
 %description 
 Xalan is an XSL processor for transforming XML documents
@@ -115,7 +113,7 @@ sh ./runConfigure \
     -m inmem \
     -C --libdir -C /usr/%_lib
 
-%make
+make
 make samples
 make tests
 
