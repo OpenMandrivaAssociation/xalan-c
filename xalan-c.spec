@@ -12,7 +12,6 @@ Summary:	An XSLT Transformation Engine in C++
 URL: http://xalan.apache.org/
 Source: Xalan-C_1_10_0-src.tar.gz 
 Patch0: xml-xalan-lib64.patch
-BuildRoot: %_tmppath/%name-%version-%release-root
 BuildRequires: xerces-c-devel >= 2.7.0
 
 %description 
