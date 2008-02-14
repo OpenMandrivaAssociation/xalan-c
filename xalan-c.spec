@@ -8,6 +8,7 @@ Version: 1.10
 Release: %mkrel 1
 License: Apache License
 Group: Development/Other
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Summary:	An XSLT Transformation Engine in C++
 URL: http://xalan.apache.org/
 Source: Xalan-C_1_10_0-src.tar.gz 
