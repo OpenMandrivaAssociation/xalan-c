@@ -5,7 +5,7 @@
 
 Name: xalan-c
 Version: 1.10
-Release: %mkrel 5
+Release: %mkrel 7
 License: Apache License
 Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -14,6 +14,8 @@ URL: http://xalan.apache.org/
 Source: Xalan-C_1_10_0-src.tar.gz 
 Patch0: xml-xalan-lib64.patch
 Patch1: Xalan-C_1_10_0-gcc-4.3-pedantic.patch
+Patch2: xalan-c_1.10.0-xerces-c-3.x.diff
+Patch3: xalan-c_1.10.0-xerces-c-gcc44.diff
 BuildRequires: xerces-c-devel >= 2.7.0
 
 %description 
@@ -91,6 +93,10 @@ Documentation for Xalan-C, viewable through your web server, too!
 %patch0 -p1 -b .orig
 %endif
 %patch1 -p1 -b .pedantic
+pushd c
+%patch2 -p0 -b .xerces-c-3.x
+popd
+%patch3 -p0
 
 %build
 rm -f c/bin/*
