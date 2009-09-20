@@ -5,7 +5,7 @@
 
 Name: xalan-c
 Version: 1.10
-Release: %mkrel 7
+Release: %mkrel 8
 License: Apache License
 Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
