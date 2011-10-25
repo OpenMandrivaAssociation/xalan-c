@@ -1,142 +1,100 @@
-%define tarversion  1_10_0
-%define packname xml-xalan
-%define minor 0
-%define libname %mklibname %{name} %{minor}
+Name:           xalan-c
+Version:        1.10.0
+Release:        8
+Summary:        Xalan XSLT processor for C
 
-Name: xalan-c
-Version: 1.10
-Release: %mkrel 8
-License: Apache License
-Group: Development/Other
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Summary:	An XSLT Transformation Engine in C++
-URL: http://xalan.apache.org/
-Source: Xalan-C_1_10_0-src.tar.gz 
-Patch0: xml-xalan-lib64.patch
-Patch1: Xalan-C_1_10_0-gcc-4.3-pedantic.patch
-Patch2: xalan-c_1.10.0-xerces-c-3.x.diff
-Patch3: xalan-c_1.10.0-xerces-c-gcc44.diff
-BuildRequires: xerces-c-devel >= 2.7.0
+Group:          System/Libraries
+License:        ASL 2.0
+URL:            http://xml.apache.org/xalan-c/
+Source0:        http://www.apache.org/dist/xml/xalan-c/Xalan-C_1_10_0-src.tar.gz
+Patch0:         xalan-c-1.10.0-escaping.patch
+Patch1:         xalan-c-1.10.0-gcc43.patch
+# http://bugs.gentoo.org/attachment.cgi?id=169168
+Patch2:         xalan-c-1.10.0-new-xerces-c.patch
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%description 
-Xalan is an XSL processor for transforming XML documents
-into HTML, text, or other XML document types. Xalan-C++ represents an
-almost complete and a robust C++ reference implementation of the W3C
-Recommendations for XSL Transformations (XSLT) and the XML Path
-Language (XPath).
+BuildRequires:  xerces-c-devel
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
-#------------------------------------------------------------------------
+%description
+Xalan is an XSLT processor for transforming XML documents into HTML, text, or
+other XML document types.
 
-%package -n %{libname}
-Group:		Development/Other
-Summary:	Library for an XSLT Transformation Engine in C++
-Obsoletes:	xalan-c < 1.10-1mdv2008.0
-Provides: xalan-c
 
-%description -n %{libname}
-Library for xalan-c
+%package        devel
+Summary:        Header files, libraries and development documentation for %{name}
+Group:          Development/Java
+Requires:       %{name} = %{version}-%{release}
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
 
-%files -n %{libname}
-%defattr(-,root,root)
-%doc c/README
-%{_bindir}/*
-%{_libdir}/*.so.*
+%description devel
+This package contains the header files, static libraries and development
+documentation for %{name}. If you like to develop programs using %{name},
+you will need to install %{name}-devel.
 
-#------------------------------------------------------------------------
-
-%package -n %{libname}-devel
-Requires: %libname = %version-%release
-Group: Development/Other
-Summary: Developpement files for XSLT Transformation Engine
-Provides: xalan-c-devel = %version-%release 
-Provides: libxalan-c-devel = %version-%release
-Obsoletes: xalan-c-devel
-
-%description -n %{libname}-devel
-Xalan is an XSL processor for transforming XML documents
-into HTML, text, or other XML document types. Xalan-C++ represents an
-almost complete and a robust C++ reference implementation of the W3C
-Recommendations for XSL Transformations (XSLT) and the XML Path
-Language (XPath).
-
-%files -n %{libname}-devel
-%defattr(-,root,root)
-%{_libdir}/*.so
-%{_includedir}/xalanc/*
-
-#------------------------------------------------------------------------
 
 %package doc
-Group:		Development/Other
-Summary:	Online manual for Xalan-C, XSLT Transformation Engine
+Group:          Development/Java
+Summary:        Documentation for Xerces-C++ validating XML parser
+
 
 %description doc
-Documentation for Xalan-C, viewable through your web server, too!
+Documentation for %{name}.
 
-%files doc
-%defattr(644 root root 755)
-%doc c/LICENSE c/readme.html c/xdocs/
-
-#------------------------------------------------------------------------
 
 %prep
-%setup -q -n %{packname}
+%setup -q -n xml-xalan/c
+%patch0 -p2 -b .escaping
+%patch1 -p2 -b .gcc43
+%patch2 -p0 -b .new-xerces-c
+find -type d -name CVS -print0 | xargs -0 rm -rf
+chmod 644 NOTICE
 
-%if "%{_lib}" != "lib"
-%patch0 -p1 -b .orig
-%endif
-%patch1 -p1 -b .pedantic
-pushd c
-%patch2 -p0 -b .xerces-c-3.x
-popd
-%patch3 -p0
 
 %build
-rm -f c/bin/*
-rm -f c/lib/*
-
-export XALANCROOT=${RPM_BUILD_DIR}/%{packname}/c/
-export XERCESCROOT=%{_includedir}/xercesc
-export ICUROOT=%_prefix
-
-cd $XALANCROOT
-
-export CXXFLAGS="$RPM_OPT_FLAGS -fexceptions"
-
-sh ./runConfigure \
-    -p linux \
-    -c gcc \
-    -x c++ \
-    -m nls \
-    -t icu \
-%if "%{_lib}" != "lib"
-    -b "64" \
+export XALANCROOT="${PWD}"
+export XERCESROOT=%{_includedir}/xercesc/
+COMMONARGS="-plinux -cgcc -xg++ -minmem -rpthreads"
+%ifarch alpha ppc64 s390x sparc64 x86_64
+./runConfigure ${COMMONARGS} -b64 -P %{_prefix} -C --libdir="%{_libdir}" -z '%{optflags}'
 %else
-    -b "32" \
+./runConfigure ${COMMONARGS} -b32 -P %{_prefix} -C --libdir="%{_libdir}" -z '%{optflags}'
 %endif
-    -P /usr \
-    -m inmem \
-    -C --libdir -C /usr/%_lib
-
+# _smp_mflags do not work
 make
-make samples
-make tests
+
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf $RPM_BUILD_ROOT
+export XALANCROOT="${PWD}"
+export XERCESROOT=%{_includedir}/xercesc/
+make install DESTDIR=$RPM_BUILD_ROOT
 
-export XALANCROOT=${RPM_BUILD_DIR}/%{packname}/c/
-cd c/
-%makeinstall
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
 
 %clean
-rm -fr %buildroot
+rm -rf $RPM_BUILD_ROOT
+
+
+%files
+%defattr(-,root,root,-)
+%doc LICENSE KEYS NOTICE
+%{_bindir}/Xalan
+%{_libdir}/libxalan*.so.*
+
+
+%files devel
+%defattr(-,root,root,-)
+%{_libdir}/libxalan*.so
+%{_includedir}/xalanc/
+
+
+%files doc
+%defattr(-,root,root,-)
+%doc readme.html xdocs samples
 
 
