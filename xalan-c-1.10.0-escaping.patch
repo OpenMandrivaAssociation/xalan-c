@@ -1,0 +1,17 @@
+This is done so that arguments to -z can contain spaces and thus we can
+pass out optflags to the build system.  Please note that we use util-linux
+specific feature here.
+
+Lubomir Kundrak <lkundrak@redhat.com>
+
+--- xml-xalan/c/runConfigure.escaping	2005-08-17 01:48:26.000000000 +0200
++++ xml-xalan/c/runConfigure	2007-11-19 17:06:39.000000000 +0100
+@@ -198,7 +198,7 @@
+ 
+ # Get the command line parameters
+ if test -x /bin/getopt -o -x /usr/bin/getopt; then
+-    set -- `getopt C:p:P:c:x:dm:n:t:m:M:r:b:l:z:h $*`
++    eval set -- `getopt -o C:p:P:c:x:dm:n:t:m:M:r:b:l:z:h -- "$@"`
+ 
+     if [ $? != 0 ]
+         then
