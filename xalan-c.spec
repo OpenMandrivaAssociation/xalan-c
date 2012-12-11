@@ -98,3 +98,58 @@ rm -rf $RPM_BUILD_ROOT
 %doc readme.html xdocs samples
 
 
+
+
+%changelog
+* Sun Nov 27 2011 Guilherme Moro <guilherme@mandriva.com> 1.10.0-10
++ Revision: 734256
+- rebuild
+- imported package xalan-c
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - P2: fix build with xerces-c-3.x (gentoo)
+    - P3: fix build with gcc-4.4.x
+
+* Thu Aug 07 2008 Thierry Vignaud <tv@mandriva.org> 1.10-5mdv2009.0
++ Revision: 266068
+- rebuild early 2009.0 package (before pixel changes)
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+* Thu May 29 2008 Helio Chissini de Castro <helio@mandriva.com> 1.10-4mdv2009.0
++ Revision: 213156
+- Recompile against current xerces-c
+- Added gcc pedantic patch
+
+* Thu Apr 24 2008 Helio Chissini de Castro <helio@mandriva.com> 1.10-3mdv2009.0
++ Revision: 197289
+- Rebuild against new xerces-c
+
+* Wed Mar 05 2008 Oden Eriksson <oeriksson@mandriva.com> 1.10-2mdv2008.1
++ Revision: 179590
+- rebuild
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - fix no-buildroot-tag
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Mon May 07 2007 Helio Chissini de Castro <helio@mandriva.com> 1.10-1mdv2008.0
++ Revision: 24862
+- Drop old nls, using icu. Added build requires
+
+
+* Wed Aug 16 2006 Helio Chissini de Castro <helio@mandriva.com>
++ 2006-08-16 15:51:22 (56379)
+- New upstream stable version
+
+* Tue Aug 15 2006 Helio Chissini de Castro <helio@mandriva.com>
++ 2006-08-15 14:34:25 (56194)
+- import xalan-c-1.4-0.20040818104017.2mdk
+
+* Mon Sep 26 2005 Nicolas Lécureuil <neoclust@mandriva.org> 1.4-0.20040818104017.2mdk
+- Rebuild to fix ticket #16486
+
