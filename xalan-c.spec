@@ -66,7 +66,7 @@ rm -rf %{buildroot}%{_prefix}/share/doc/xalan-c/api
 
 %files doc
 %defattr(-,root,root,-)
-%doc readme.html xdocs samples
+%doc readme.html samples
 
 
 
