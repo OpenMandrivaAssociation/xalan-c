@@ -1,3 +1,5 @@
+%define oname xalan_c
+
 Name:           xalan-c
 Version:        1.12
 Release:        1
@@ -35,7 +37,7 @@ Summary:        Documentation for Xerces-C++ validating XML parser
 Documentation for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -n %{oname}-%{version} -p1
 
 rm -vf samples/configure samples/configure.in
 
