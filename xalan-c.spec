@@ -1,5 +1,9 @@
 %define oname xalan_c
 
+%define major       112
+%define libname     %mklibname %{name} %{major}
+%define develname   %mklibname %{name} -d
+
 Name:           xalan-c
 Version:        1.12
 Release:        1
@@ -14,16 +18,29 @@ BuildRequires:  pkgconfig(xerces-c)
 BuildRequires:  icu-devel
 BuildRequires:  cmake
 
+Requires:       %{libname} = %{version}-%{release}
+
 %description
 Xalan is an XSLT processor for transforming XML documents into HTML, text, or
 other XML document types.
 
-%package        devel
+%package -n %{libname}
+Summary:        Xalan-C++ XSLT processor
+Group:          System/Libraries
+
+%description -n %{libname}
+Xalan is an XSLT processor for transforming XML documents into HTML, text, or
+other XML document types.
+
+This package contains the shared xalan-c library.
+
+%package -n %{develname}
 Summary:        Header files, libraries and development documentation for %{name}
 Group:          Development/Java
 Requires:       %{name} = %{version}-%{release}
+Requires:       %{libname} = %{version}-%{release}
 
-%description devel
+%description -n %{develname}
 This package contains the header files, static libraries and development
 documentation for %{name}. If you like to develop programs using %{name},
 you will need to install %{name}-devel.
@@ -50,25 +67,23 @@ rm -vf samples/configure samples/configure.in
 
 rm -rf %{buildroot}%{_prefix}/share/doc/xalan-c/api
 
-
 %files
 %defattr(-,root,root,-)
 %doc LICENSE KEYS NOTICE
 %{_bindir}/Xalan
-%{_libdir}/libxalan*.so.*
 
+%files -n %{libname}
+%{_libdir}/lib*.so.%{major}*
 
-%files devel
-%defattr(-,root,root,-)
-%{_libdir}/libxalan*.so
-%{_includedir}/xalanc/
-
+%files -n %{develname}
+%{_includedir}/xalanc
+%{_libdir}/lib*.so
+%{_libdir}/cmake/XalanC/*.cmake
+%{_libdir}/pkgconfig/%{name}.pc
 
 %files doc
 %defattr(-,root,root,-)
 %doc readme.html samples
-
-
 
 
 %changelog
