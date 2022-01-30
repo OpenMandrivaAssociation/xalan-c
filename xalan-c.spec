@@ -12,7 +12,6 @@ Source0:         http://www.us.apache.org/dist/xalan/xalan-c/sources/xalan_c-%{v
 
 BuildRequires:  pkgconfig(xerces-c)
 BuildRequires:  icu-devel
-BuildRequires:  ninja
 BuildRequires:  cmake
 
 %description
@@ -43,12 +42,11 @@ rm -vf samples/configure samples/configure.in
 
 %build
 %cmake \
-    -Dtranscoder=icu \
-    -GNinja
-%ninja_build -C build
+    -Dtranscoder=icu
+%make_build
 
 %install
-%ninja_install -C build
+%make_install -C build
 
 rm -rf %{buildroot}%{_prefix}/share/doc/xalan-c/api
 
