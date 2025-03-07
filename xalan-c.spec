@@ -9,7 +9,7 @@
 
 Name:           xalan-c
 Version:        1.12
-Release:        3
+Release:        4
 Summary:        Xalan XSLT processor for C
 
 Group:          System/Libraries
