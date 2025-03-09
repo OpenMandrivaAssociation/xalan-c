@@ -1,3 +1,6 @@
+# https://github.com/llvm/llvm-project/issues/96859
+%global optflags %{optflags} -fdelayed-template-parsing
+
 %define oname xalan_c
 
 %define major       112
